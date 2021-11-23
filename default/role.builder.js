@@ -23,12 +23,17 @@ var roleBuilder = {
             }
 	    }
 	    else {
-	        var source = Game.getObjectById(creep.memory.source.id);
-            if(creep.harvest(source) == ERR_NOT_IN_RANGE) {
+            var source = Game.getObjectById(creep.memory.source.id);
+            if (creep.memory.source.structureType == undefined) {
+                if (creep.harvest(source) == ERR_NOT_IN_RANGE) {
+                    creep.moveTo(source, {visualizePathStyle: {stroke: '#ffaa00'}});
+                }
+            }
+            else if (creep.withdraw(source, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
                 creep.moveTo(source, {visualizePathStyle: {stroke: '#ffaa00'}});
             }
 	    }
-	}
+    }
 };
 
 module.exports = roleBuilder;

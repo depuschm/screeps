@@ -16,29 +16,19 @@ var spawnerRespawn = {
                 spawn.pos.y, 
                 {align: 'left', opacity: 0.8});
         }
-	    
-	    // Spawn Creep
-	    var maxAmounts = {
-	        harvesters: 0,
-	        upgraders: 10,
-	        builders: 4
-	    };
-	    
+        
+        // Spawn Creep
+        var maxAmounts = {
+            harvesters: 6,
+            builders: 4,
+            upgraders: 6
+        };
+        
         var harvesters = _.filter(Game.creeps, (creep) => creep.memory.role == 'harvester');
         if(harvesters.length < maxAmounts.harvesters) {
             var stats = [WORK,CARRY,MOVE];
             var name = 'Harvester' + Game.time;
             var options = { memory: {role: 'harvester', source: null} };
-            
-            this.tryToSpawnCreep(spawn, stats, name, options);
-            return;
-        }
-        
-        var upgraders = _.filter(Game.creeps, (creep) => creep.memory.role == 'upgrader');
-        if(upgraders.length < maxAmounts.upgraders) {
-            var stats = [WORK,CARRY,MOVE];
-            var name = 'Upgrader' + Game.time;
-            var options = { memory: {role: 'upgrader', source: null} };
             
             this.tryToSpawnCreep(spawn, stats, name, options);
             return;
@@ -53,6 +43,16 @@ var spawnerRespawn = {
             this.tryToSpawnCreep(spawn, stats, name, options);
             return;
         }
+        
+        var upgraders = _.filter(Game.creeps, (creep) => creep.memory.role == 'upgrader');
+        if(upgraders.length < maxAmounts.upgraders) {
+            var stats = [WORK,CARRY,MOVE];
+            var name = 'Upgrader' + Game.time;
+            var options = { memory: {role: 'upgrader', source: null} };
+            
+            this.tryToSpawnCreep(spawn, stats, name, options);
+            return;
+        }
 	},
 	
 	tryToSpawnCreep: function(spawn, stats, name, options) {
@@ -63,7 +63,7 @@ var spawnerRespawn = {
                 spawn.spawnCreep(stats, name, options);
             }
         }
-	}
+    }
 };
 
 module.exports = spawnerRespawn;

@@ -1,6 +1,6 @@
 var utils = {
 
-	// https://www.reddit.com/r/screeps/comments/5geco0/question_way_to_survey_the_terrain_of_a_3x3_area/
+    // From: https://www.reddit.com/r/screeps/comments/5geco0/question_way_to_survey_the_terrain_of_a_3x3_area#t1_db5v1j4
     findSources: function(room, spawn) {
         var sources = room.find(FIND_SOURCES);
         var sourceData = [];
@@ -50,19 +50,40 @@ var utils = {
     assignSource: function() {
         var room = Game.rooms['W4N3'];
         
-        // Assign source where more workers are needed
-        // _.sortBy(sources, s => creep.pos.getRangeTo(s))
+        // Find sources where more workers are needed
         var sources = room.memory.sources;
+        var potentialSources = [];
         for (var i = 0; i <= sources.length; i++) {
             var source = sources[i];
             if (source != undefined) {
                 var totalPositions = source.minerPositions.length;
                 if (source.currentWorkers < totalPositions + source.extraWorkers) {
-                    source.currentWorkers++;
-                    return source;
+                    potentialSources.push(source);
                 }
             }
         }
+        
+        if (potentialSources.length > 0) {
+            // Choose source with least amount of workers
+            potentialSources.sort((a, b) => {
+                // a.currentWorkers - b.currentWorkers
+                var aTotalWorkers = a.minerPositions.length + a.extraWorkers;
+                var bTotalWorkers = b.minerPositions.length + b.extraWorkers;
+                var aRatio = a.currentWorkers / aTotalWorkers;
+                var bRatio = b.currentWorkers / bTotalWorkers;
+                
+                return aRatio - bRatio;
+            });
+            var source = potentialSources[0];
+            source.currentWorkers++;
+            return source;
+        }
+        else {
+            // If no source available, choose spawn and structures as source
+            var spawn = Game.spawns['Home'];
+            return spawn;
+        }
+        
         return null;
         
         // TODO: print miners like 3/4 working and choose free position if available

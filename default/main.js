@@ -14,8 +14,12 @@ module.exports.loop = function () {
     // Clear memory
     for(var name in Memory.creeps) {
         if(!Game.creeps[name]) {
+            // Update currentWorkers in memory (if source is not spawn/structure)
             var source = Memory.creeps[name].source;
-            room.memory.sources[source.i].currentWorkers--;
+            if (source.i != undefined) {
+                var sourceMemory = room.memory.sources[source.i];
+                sourceMemory.currentWorkers--;
+            }
             
             delete Memory.creeps[name];
             console.log('Clearing non-existing creep memory:', name);
