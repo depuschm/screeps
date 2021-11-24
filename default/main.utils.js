@@ -47,7 +47,7 @@ var utils = {
         room.memory.sources = sourceData;
     },
     
-    assignSource: function() {
+    assignSource: function(options) {
         var room = Game.rooms['W4N3'];
         
         // Find sources where more workers are needed
@@ -66,7 +66,6 @@ var utils = {
         if (potentialSources.length > 0) {
             // Choose source with least amount of workers
             potentialSources.sort((a, b) => {
-                // a.currentWorkers - b.currentWorkers
                 var aTotalWorkers = a.minerPositions.length + a.extraWorkers;
                 var bTotalWorkers = b.minerPositions.length + b.extraWorkers;
                 var aRatio = a.currentWorkers / aTotalWorkers;
@@ -78,7 +77,7 @@ var utils = {
             source.currentWorkers++;
             return source;
         }
-        else {
+        else if (options.memory.role == 'builder' || options.memory.role == 'upgrader') {
             // If no source available, choose spawn and structures as source
             var spawn = Game.spawns['Home'];
             return spawn;
