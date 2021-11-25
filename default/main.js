@@ -16,12 +16,10 @@ module.exports.loop = function () {
     for(var name in Memory.creeps) {
         if(!Game.creeps[name]) {
             // Update currentWorkers in memory (if source is not spawn/structure)
-            if (source != undefined) {
-                var source = Memory.creeps[name].source;
-                if (source.i != undefined) {
-                    var sourceMemory = room.memory.sources[source.i];
-                    sourceMemory.currentWorkers--;
-                }
+            var source = Memory.creeps[name].source;
+            if (source != undefined && source.i != undefined) {
+                var sourceMemory = room.memory.sources[source.i];
+                sourceMemory.currentWorkers--;
             }
             
             delete Memory.creeps[name];
@@ -32,7 +30,7 @@ module.exports.loop = function () {
     spawnerRespawn.run();
     
     // Perform tasks
-    //roleTower.run();
+    roleTower.run(room);
     for(var name in Game.creeps) {
         var creep = Game.creeps[name];
         if (creep.memory.role == 'harvester') {

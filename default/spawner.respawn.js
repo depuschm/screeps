@@ -1,5 +1,9 @@
 var utils = require('main.utils');
 
+// TODO: If all harvesters die, other creeps still try to get energy from spawn,
+//       and new harvesters won't spawn because there is not enough energy.
+//       Only after all other creeps die the spawner will slowly generate enough
+//       energy to spawn new harvesters. Fix this.
 var spawnerRespawn = {
 
     run: function() {
@@ -88,7 +92,7 @@ var spawnerRespawn = {
             }
             else {
                 options.memory.source = utils.assignSource(options);
-                if (options.memory.source != null) {
+                if (!(options.memory.role == 'harvester' && options.memory.source == null)) {
                     spawn.spawnCreep(stats, name, options);
                 }
             }

@@ -77,11 +77,11 @@ var utils = {
             source.currentWorkers++;
             return source;
         }
-        else if (options.memory.role == 'builder' || options.memory.role == 'upgrader') {
+        /*else if (options.memory.role == 'builder' || options.memory.role == 'upgrader') {
             // If no source available, choose spawn and structures as source
             var spawn = Game.spawns['Home'];
             return spawn;
-        }
+        }*/
         
         return null;
         
